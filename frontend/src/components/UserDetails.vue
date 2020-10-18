@@ -13,7 +13,13 @@
         autocapitalize="none"
       />
 
-      <input type="submit" class="button" @click.prevent="save" value="Go!" />
+      <input
+        type="submit"
+        class="button"
+        @click.prevent="save"
+        :disabled="disabled"
+        value="Go!"
+      />
     </form>
   </div>
 </template>
@@ -27,7 +33,7 @@ export default {
   data: function() {
     return {
       name: this.$store.state.storage.name,
-      formGame: this.$store.state.storage.latestGameId
+      formGame: this.$store.state.storage.latestGameId,
     };
   },
   computed: {
@@ -36,7 +42,10 @@ export default {
     },
     gameId() {
       return this.$store.state.latestGameId;
-    }
+    },
+    disabled() {
+      return !(this.name && this.formGame);
+    },
   },
   mounted() {
     this.$nextTick(function() {
@@ -55,13 +64,13 @@ export default {
     },
     cancel() {
       this.$store.commit("setNameForm", false);
-    }
+    },
   },
   watch: {
     gameId() {
       this.formGame = this.gameId;
-    }
-  }
+    },
+  },
 };
 </script>
 

@@ -18,15 +18,15 @@ module.exports = class {
 
   getHandlers() {
     return {
-      connected: connection => this.connect(connection),
+      connected: (connection) => this.connect(connection),
       disconnected: () => this.disconnect(),
       timeout: () => this.timeout(),
-      makeMove: payload => this.makeMove(payload),
-      setName: payload => this.setName(payload),
-      joinGame: payload => this.joinGame(payload),
-      toggleSpyMaster: payload => this.toggleSpyMaster(payload),
-      newGame: payload => this.newGame(payload),
-      skipTurn: () => this.skipTurn()
+      makeMove: (payload) => this.makeMove(payload),
+      setName: (payload) => this.setName(payload),
+      joinGame: (payload) => this.joinGame(payload),
+      toggleSpyMaster: (payload) => this.toggleSpyMaster(payload),
+      newGame: (payload) => this.newGame(payload),
+      skipTurn: () => this.skipTurn(),
     };
   }
 
@@ -73,6 +73,8 @@ module.exports = class {
     if (!this.player) return;
 
     id = id.replace(/[^a-zA-Z0-8-_]/g, "").substring(0, 20);
+
+    if (id.length < 1) return;
 
     if (!id || (this.game && this.game.id === id)) {
       this.updateGame();
@@ -140,7 +142,7 @@ module.exports = class {
   updateGame(action = "setGame") {
     let data = JSON.parse(JSON.stringify(this.game));
     if (!this.player.isSpyMaster) {
-      data.tiles = data.tiles.map(tile => {
+      data.tiles = data.tiles.map((tile) => {
         if (!tile.uncovered && !this.game.winner) delete tile.color;
         return tile;
       });
