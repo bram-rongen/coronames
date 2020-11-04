@@ -36,14 +36,14 @@ import CloseIcon from "vue-material-design-icons/Close.vue";
 export default {
   name: "Admin",
   components: {
-    CloseIcon
+    CloseIcon,
   },
   data: function() {
     return { pass: "" };
   },
   computed: mapState("admin", {
-    games: state => state.games,
-    isAuthenticated: state => state.isAuthenticated
+    games: (state) => state.games,
+    isAuthenticated: (state) => state.isAuthenticated,
   }),
   methods: {
     hideAdmin() {
@@ -52,10 +52,10 @@ export default {
     authenticate() {
       this.$socket.sendObj({
         action: "adminAuth",
-        payload: "admin"
+        payload: this.pass,
       });
-    }
-  }
+    },
+  },
 };
 </script>
 

@@ -9,9 +9,9 @@ module.exports = class {
 
   getHandlers() {
     return {
-      connected: connection => this.connect(connection),
+      connected: (connection) => this.connect(connection),
       timeout: () => this.timeout(),
-      adminAuth: key => this.adminAuth(key)
+      adminAuth: (key) => this.adminAuth(key),
     };
   }
 
@@ -27,7 +27,7 @@ module.exports = class {
   }
 
   adminAuth(key) {
-    if (key === "admin" && !this.isAuthenticated) {
+    if (key === process.env.ADMIN_PASS && !this.isAuthenticated) {
       this.isAuthenticated = true;
       this.sendAction("adminAuthenticate");
       this.addEventListeners();
@@ -37,7 +37,7 @@ module.exports = class {
   addEventListeners() {
     this.games.on("add", this.gameAddHandler);
     this.games.on("delete", this.gameDeleteHandler);
-    Array.from(this.games.values()).forEach(game => {
+    Array.from(this.games.values()).forEach((game) => {
       this.gameAdd([game.id, game]);
     });
   }
@@ -46,7 +46,7 @@ module.exports = class {
     if (this.isAuthenticated) {
       this.games.off("add", this.gameAddHandler);
       this.games.off("delete", this.gameDeleteHandler);
-      Array.from(this.games.values()).forEach(game => {
+      Array.from(this.games.values()).forEach((game) => {
         game.off("update", this.gameUpdateHandler);
       });
     }
